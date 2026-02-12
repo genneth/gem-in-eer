@@ -4,7 +4,7 @@ The user wants to set their sound pack to: {{arg0}}
 
 If they provided a pack name, please:
 1. Run the download script to ensure it exists.
-2. Tell the user to run `gemini extensions config gem-in-eer "Active Pack"` to finalize the change, or explain that they can set the `RA2_PACK` environment variable.
+2. Tell the user to run `gemini extensions config gem-in-eer "Active Pack"` to finalize the change, or explain that they can set the `GEMEER_PACK` environment variable.
 
 !{powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/download-pack.ps1 -PackName {{arg0}}}
 """

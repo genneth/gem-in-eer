@@ -35,6 +35,9 @@ foreach ($PackName in $Packs.Keys) {
     $FileList = $Files[$PackName]
     
     Write-Host "Downloading $PackName pack..." -ForegroundColor Cyan
+    # Download manifest
+    curl.exe -fsSL "$($BaseUrl.Replace('sounds/', 'openpeon.json'))" -o (Join-Path $PackDir "openpeon.json")
+
     foreach ($FileName in $FileList) {
         $DestPath = Join-Path $PackDir $FileName
         if (-not (Test-Path $DestPath)) {

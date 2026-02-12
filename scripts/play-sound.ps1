@@ -26,73 +26,86 @@ if ($Event -eq "SessionStart" -and -not (Test-Path (Join-Path $AudioRootDir "mas
     Start-Process powershell.exe -ArgumentList "-NoProfile", "-NonInteractive", "-File", (Join-Path $ExtensionPath "scripts/setup-audio.ps1") -WindowStyle Hidden
 }
 
-$AudioDir = Join-Path $AudioRootDir $Pack
-
-$SoundMap = @{
-    "SessionStart" = @("KirovReporting.mp3", "ToolsReady.mp3", "AirshipReady.mp3")
-    "SessionEnd"   = @("ShesGoingToBlow.mp3", "WereLosingAltitude.mp3")
-    "AfterAgent"   = @("TargetAcquired.mp3", "PowerUp.mp3", "Engineering.mp3")
-    "BeforeTool"   = @("Acknowledged.mp3", "SettingNewCourse.mp3", "BearingSet.mp3", "YesCommander.mp3")
-    "AfterTool"    = @("Engineering.mp3", "Acknowledged.mp3")
-    "Error"        = @("MaydayMayday.mp3", "ShesGoingToBlow.mp3", "GetMeOuttaHere.mp3")
-    "InputRequired" = @("Information.mp3", "ExaminingDiagrams.mp3", "CheckingDesigns.mp3")
+# Map Gemini CLI events to CESP (Coding Event Sound Pack) categories
+$CategoryMap = @{
+    "SessionStart"    = "session.start"
+    "SessionEnd"      = "session.end"
+    "AfterAgent"      = "task.complete"
+    "BeforeTool"      = "task.acknowledge"
+    "AfterTool"       = "task.acknowledge"
+    "InputRequired"   = "input.required"
+    "BeforeAgent"     = "task.acknowledge"
 }
 
-$Category = $Event
-
-# Check for errors in AfterTool or other events
+$CespCategory = $CategoryMap[$Event]
 if ($HookData -and $HookData.error) {
-    $Category = "Error"
+    $CespCategory = "task.error"
 }
 
-$Sounds = $SoundMap[$Category]
-if (-not $Sounds) {
-    exit 0
-}
+if (-not $CespCategory) { exit 0 }
 
-# Find a sound that exists in the current pack
-$PossibleSounds = $Sounds | Get-Random -Count $Sounds.Count
-$SoundFile = $null
-
-foreach ($s in $PossibleSounds) {
-    $Path1 = Join-Path $AudioDir $s
-    $Path2 = Join-Path $AudioDir "sounds/$s"
-    if (Test-Path $Path1) {
-        $SoundFile = $s
-        $FinalPath = $Path1
-        break
-    } elseif (Test-Path $Path2) {
-        $SoundFile = $s
-        $FinalPath = $Path2
-        break
-    }
-}
-
-# If no sound found in specific pack, try mashup
-if (-not $SoundFile) {
-    $AudioDir = Join-Path $AudioRootDir "mashup"
-    foreach ($s in $PossibleSounds) {
-        $Path1 = Join-Path $AudioDir $s
-        if (Test-Path $Path1) {
-            $SoundFile = $s
-            $FinalPath = $Path1
-            break
+# Function to pick a sound from a pack's manifest
+function Get-SoundFromPack($PackPath, $Category) {
+    $ManifestPath = Join-Path $PackPath "openpeon.json"
+    if (-not (Test-Path $ManifestPath)) { return $null }
+    
+    try {
+        $Manifest = Get-Content $ManifestPath | ConvertFrom-Json
+        $Sounds = $Manifest.categories.$Category.sounds
+        if ($Sounds) {
+            $Sound = $Sounds | Get-Random
+            $File = $Sound.file
+            # Handle both "file.mp3" and "sounds/file.mp3"
+            $PathsToTry = @(
+                (Join-Path $PackPath $File),
+                (Join-Path $PackPath ([System.IO.Path]::GetFileName($File))),
+                (Join-Path $PackPath (Join-Path "sounds" ([System.IO.Path]::GetFileName($File))))
+            )
+            foreach ($P in $PathsToTry) {
+                if (Test-Path $P) { return $P }
+            }
         }
+    } catch {}
+    return $null
+}
+
+$PackPath = Join-Path $AudioRootDir $Pack
+$SoundPath = Get-SoundFromPack $PackPath $CespCategory
+
+# Fallback to mashup if sound not found in active pack
+if (-not $SoundPath -and $Pack -ne "mashup") {
+    $MashupPath = Join-Path $AudioRootDir "mashup"
+    $SoundPath = Get-SoundFromPack $MashupPath $CespCategory
+}
+
+# Final fallback: Hardcoded RA2 names (backwards compatibility for manual installs)
+if (-not $SoundPath) {
+    $HardMap = @{
+        "session.start"    = @("KirovReporting.mp3", "ToolsReady.mp3", "AirshipReady.mp3")
+        "task.complete"    = @("TargetAcquired.mp3", "PowerUp.mp3", "Engineering.mp3")
+        "task.acknowledge" = @("Acknowledged.mp3", "SettingNewCourse.mp3", "YesCommander.mp3")
+        "task.error"       = @("MaydayMayday.mp3", "ShesGoingToBlow.mp3")
+        "input.required"   = @("Information.mp3")
+    }
+    $PossibleFiles = $HardMap[$CespCategory]
+    foreach ($f in ($PossibleFiles | Get-Random -Count $PossibleFiles.Count)) {
+        $P1 = Join-Path $AudioRootDir "mashup/$f"
+        if (Test-Path $P1) { $SoundPath = $P1; break }
     }
 }
 
-if (-not $SoundFile) {
-    exit 0
-}
+if (-not $SoundPath) { exit 0 }
 
-$SoundPath = $FinalPath
+# Determine Volume
+$Volume = $env:GEMEER_VOLUME
+if (-not $Volume) { $Volume = 0.5 }
 
-# Play sound in background so we don't block the CLI
+# Play sound in background
 $PlayCommand = @"
 Add-Type -AssemblyName PresentationCore
 `$player = New-Object System.Windows.Media.MediaPlayer
 `$player.Open([Uri]::new('$($SoundPath.Replace([char]92, '/'))'))
-`$player.Volume = 0.5
+`$player.Volume = $Volume
 `$player.Play()
 Start-Sleep -Seconds 5
 `$player.Close()

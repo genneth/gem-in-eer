@@ -25,9 +25,9 @@ if (-not $PackInfo) {
     exit 1
 }
 
-$Repo = $PackInfo.source_repo -ifnot $PackInfo.source_repo -then "PeonPing/og-packs"
-$Ref = $PackInfo.source_ref -ifnot $PackInfo.source_ref -then "v1.0.0"
-$Path = $PackInfo.source_path -ifnot $PackInfo.source_path -then $PackName
+$Repo = if ($PackInfo.source_repo) { $PackInfo.source_repo } else { "PeonPing/og-packs" }
+$Ref = if ($PackInfo.source_ref) { $PackInfo.source_ref } else { "v1.0.0" }
+$Path = if ($PackInfo.source_path -ne $null) { $PackInfo.source_path } else { $PackName }
 
 $BaseUrl = "https://raw.githubusercontent.com/$Repo/$Ref/$Path"
 if ($Path -eq "") { $BaseUrl = "https://raw.githubusercontent.com/$Repo/$Ref" }
