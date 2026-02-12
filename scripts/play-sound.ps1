@@ -18,12 +18,7 @@ if ($JsonInput) {
 # Determine the active pack
 $Pack = $env:GEMINEER_PACK
 if (-not $Pack -or -not (Test-Path (Join-Path $AudioRootDir $Pack))) {
-    $Pack = "mashup"
-}
-
-# Auto-setup on first run
-if ($Event -eq "SessionStart" -and -not (Test-Path (Join-Path $AudioRootDir "mashup"))) {
-    Start-Process powershell.exe -ArgumentList "-NoProfile", "-NonInteractive", "-File", (Join-Path $ExtensionPath "scripts/manage.ps1"), "-Action", "setup-mashup" -WindowStyle Hidden
+    exit 0
 }
 
 # Map Gemini CLI events to CESP (Coding Event Sound Pack) categories
@@ -55,7 +50,7 @@ function Get-SoundFromPack($PackPath, $Category) {
         if ($Sounds) {
             $Sound = $Sounds | Get-Random
             $File = $Sound.file
-            # Handle both "file.mp3" and "sounds/file.mp3"
+            # Try root, sounds/ subfolder, etc.
             $PathsToTry = @(
                 (Join-Path $PackPath $File),
                 (Join-Path $PackPath ([System.IO.Path]::GetFileName($File))),
@@ -71,28 +66,6 @@ function Get-SoundFromPack($PackPath, $Category) {
 
 $PackPath = Join-Path $AudioRootDir $Pack
 $SoundPath = Get-SoundFromPack $PackPath $CespCategory
-
-# Fallback to mashup if sound not found in active pack
-if (-not $SoundPath -and $Pack -ne "mashup") {
-    $MashupPath = Join-Path $AudioRootDir "mashup"
-    $SoundPath = Get-SoundFromPack $MashupPath $CespCategory
-}
-
-# Final fallback: Hardcoded RA2 names (backwards compatibility for manual installs)
-if (-not $SoundPath) {
-    $HardMap = @{
-        "session.start"    = @("KirovReporting.mp3", "ToolsReady.mp3", "AirshipReady.mp3")
-        "task.complete"    = @("TargetAcquired.mp3", "PowerUp.mp3", "Engineering.mp3")
-        "task.acknowledge" = @("Acknowledged.mp3", "SettingNewCourse.mp3", "YesCommander.mp3")
-        "task.error"       = @("MaydayMayday.mp3", "ShesGoingToBlow.mp3")
-        "input.required"   = @("Information.mp3")
-    }
-    $PossibleFiles = $HardMap[$CespCategory]
-    foreach ($f in ($PossibleFiles | Get-Random -Count $PossibleFiles.Count)) {
-        $P1 = Join-Path $AudioRootDir "mashup/$f"
-        if (Test-Path $P1) { $SoundPath = $P1; break }
-    }
-}
 
 if (-not $SoundPath) { exit 0 }
 

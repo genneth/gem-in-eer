@@ -2,18 +2,19 @@
 
 **The tools of the future!**
 
-Gem-in-eer is a themed notification system for the Gemini CLI, inspired by PeonPing. It provides audio feedback for CLI events using iconic unit responses.
+Gem-in-eer is a sound notification system for the Gemini CLI, inspired by PeonPing. It provides audio feedback for CLI events using iconic unit responses from various games.
 
 ## Technical Architecture
-- **Manifest:** `gemini-extension.json` defines the extension, repository, and the `GEMINEER_PACK` setting.
-- **Hooks:** `hooks/hooks.json` registers PowerShell triggers for `SessionStart`, `SessionEnd`, `AfterAgent`, `BeforeTool`, and `AfterTool`.
-- **Slash Commands:** Located in `commands/gem-in-eer/`, allowing for pack listing (`/list`), setting (`/set`), and restoration (`/mashup`).
-- **Audio Logic:** `scripts/play-sound.ps1` maps events to sounds and spawns a background PowerShell process using `System.Windows.Media.MediaPlayer` to avoid blocking the CLI.
+- **Manifest:** `gemini-extension.json` defines the extension, repository, and the `GEMINEER_PACK` and `GEMINEER_VOLUME` settings.
+- **Hooks:** `hooks/hooks.json` registers PowerShell triggers for session and tool events.
+- **Slash Commands:** Located in `commands/gem-in-eer/`, for listing and setting packs.
+- **Audio Logic:** `scripts/play-sound.ps1` maps events to sounds using pack manifests (`openpeon.json`) and plays them asynchronously.
 - **Asset Management:** 
-    - Audio files are **not** committed to Git (see `.gitignore`).
-    - `scripts/manage.ps1` handles all registry tasks: listing packs, downloading specific packs, and initial setup.
-    - **Auto-Setup:** On the first `SessionStart`, if the `mashup` pack is missing, `play-sound.ps1` triggers `manage.ps1 -Action setup-mashup` in the background.
+    - Audio files are ignored by Git.
+    - `scripts/manage.ps1` handles registry listing and pack downloading.
+    - Users must run `/gem-in-eer:set <pack>` to download sounds after installation.
 
 ## Key Configuration
-- **Active Pack:** Controlled by the `GEMINEER_PACK` environment variable (set via `gemini extensions config`).
-- **Packs:** Default is `mashup`, with support for `kirov`, `engineer`, or any pack from the [OpenPeon Registry](https://github.com/PeonPing/registry).
+- **Active Pack:** Controlled by `GEMINEER_PACK`.
+- **Volume:** Controlled by `GEMINEER_VOLUME` (0.0 to 1.0).
+- **Packs:** Support for any pack from the [OpenPeon Registry](https://github.com/PeonPing/registry).

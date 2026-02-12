@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet("list", "download", "setup-mashup")]
+    [ValidateSet("list", "download")]
     [string]$Action,
     
     [string]$PackName
@@ -74,18 +74,5 @@ switch ($Action) {
     
     "download" {
         Download-Pack $PackName
-    }
-    
-    "setup-mashup" {
-        # Default RA2-style setup
-        Download-Pack "ra2_kirov"
-        Download-Pack "ra2_soviet_engineer"
-        
-        Write-Host "Creating mashup..."
-        $MashupDir = Join-Path $AudioRootDir "mashup"
-        if (-not (Test-Path $MashupDir)) { New-Item -ItemType Directory -Path $MashupDir | Out-Null }
-        Copy-Item (Join-Path $AudioRootDir "ra2_kirov/*") $MashupDir -Recurse -Force
-        Copy-Item (Join-Path $AudioRootDir "ra2_soviet_engineer/*") $MashupDir -Recurse -Force
-        Write-Host "Mashup established."
     }
 }
