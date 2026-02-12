@@ -19,3 +19,9 @@ Gem-in-eer is a sound notification system for the Gemini CLI, inspired by PeonPi
 - **Active Pack:** Controlled by `GEMINEER_PACK`.
 - **Volume:** Controlled by `GEMINEER_VOLUME` (0.0 to 1.0).
 - **Packs:** Support for any pack from the [OpenPeon Registry](https://github.com/PeonPing/registry).
+
+## Dynamic Pack Selection
+When the user wants to list or set a pack, use the following logic:
+1. To see all available packs, run `powershell.exe -File scripts/get-registry.ps1`.
+2. Present the list to the user.
+3. If the user picks a pack, use the `/gem-in-eer:set <pack_name>` command.

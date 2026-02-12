@@ -1,8 +1,10 @@
 description = "Switch to a different sound pack. Downloads it if missing."
 prompt = """
-The user wants to set their sound pack to: {{arg0}}
+The user wants to set their sound pack. 
 
-If they provided a pack name, please:
+If they DID NOT provide a pack name, please run `powershell.exe -File ${extensionPath}/scripts/manage.ps1 -Action list`, show them the list of available packs, and ask which one they want.
+
+If they DID provide a pack name ({{arg0}}):
 1. Run the download script to ensure it exists.
 2. Tell the user to run `gemini extensions config gem-in-eer "Active Pack"` to finalize the change, or explain that they can set the `GEMINEER_PACK` environment variable.
 
