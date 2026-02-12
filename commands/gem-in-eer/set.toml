@@ -6,5 +6,5 @@ If they provided a pack name, please:
 1. Run the download script to ensure it exists.
 2. Tell the user to run `gemini extensions config gem-in-eer "Active Pack"` to finalize the change, or explain that they can set the `GEMINEER_PACK` environment variable.
 
-!{powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/download-pack.ps1 -PackName {{arg0}}}
+!{powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/manage.ps1 -Action download -PackName {{arg0}}}
 """

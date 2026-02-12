@@ -2,5 +2,5 @@ description = "Restore the default RA2 Soviet/Kirov mashup pack."
 prompt = """
 Setting the pack to mashup. Please tell the user to run `gemini extensions config gem-in-eer "Active Pack"` and enter "mashup".
 
-!{powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/setup-audio.ps1}
+!{powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/manage.ps1 -Action setup-mashup}
 """

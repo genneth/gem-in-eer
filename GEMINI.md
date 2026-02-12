@@ -11,9 +11,8 @@ Gem-in-eer is a themed notification system for the Gemini CLI, inspired by PeonP
 - **Audio Logic:** `scripts/play-sound.ps1` maps events to sounds and spawns a background PowerShell process using `System.Windows.Media.MediaPlayer` to avoid blocking the CLI.
 - **Asset Management:** 
     - Audio files are **not** committed to Git (see `.gitignore`).
-    - `scripts/setup-audio.ps1` downloads default assets from the PeonPing registry.
-    - `scripts/download-pack.ps1` handles on-demand downloads for new packs.
-    - **Auto-Setup:** On the first `SessionStart`, if the `mashup` pack is missing, `play-sound.ps1` triggers a background download.
+    - `scripts/manage.ps1` handles all registry tasks: listing packs, downloading specific packs, and initial setup.
+    - **Auto-Setup:** On the first `SessionStart`, if the `mashup` pack is missing, `play-sound.ps1` triggers `manage.ps1 -Action setup-mashup` in the background.
 
 ## Key Configuration
 - **Active Pack:** Controlled by the `GEMINEER_PACK` environment variable (set via `gemini extensions config`).

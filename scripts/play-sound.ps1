@@ -23,7 +23,7 @@ if (-not $Pack -or -not (Test-Path (Join-Path $AudioRootDir $Pack))) {
 
 # Auto-setup on first run
 if ($Event -eq "SessionStart" -and -not (Test-Path (Join-Path $AudioRootDir "mashup"))) {
-    Start-Process powershell.exe -ArgumentList "-NoProfile", "-NonInteractive", "-File", (Join-Path $ExtensionPath "scripts/setup-audio.ps1") -WindowStyle Hidden
+    Start-Process powershell.exe -ArgumentList "-NoProfile", "-NonInteractive", "-File", (Join-Path $ExtensionPath "scripts/manage.ps1"), "-Action", "setup-mashup" -WindowStyle Hidden
 }
 
 # Map Gemini CLI events to CESP (Coding Event Sound Pack) categories
