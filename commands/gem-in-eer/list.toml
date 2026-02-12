@@ -2,5 +2,5 @@ description = "List all available sound packs from the PeonPing registry."
 prompt = """
 Below is a list of available sound packs. Please display them to the user in a nice table or list.
 
-!{powershell.exe -NoProfile -ExecutionPolicy Bypass -File ../../scripts/manage.ps1 -Action list}
+!{powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "$p = if (Test-Path $env:TEMP/gemineer_path.txt) { Get-Content $env:TEMP/gemineer_path.txt } else { '.' }; powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"$p/scripts/manage.ps1\" -Action list"}
 """

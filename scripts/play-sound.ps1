@@ -5,6 +5,10 @@ param(
 $ExtensionPath = $PSScriptRoot | Split-Path -Parent
 $AudioRootDir = Join-Path $ExtensionPath "audio"
 
+# Persist path for slash commands
+$PathFile = Join-Path $env:TEMP "gemineer_path.txt"
+$ExtensionPath | Out-File $PathFile -Encoding UTF8
+
 # Read JSON from stdin
 $JsonInput = $Input | Out-String
 if ($JsonInput) {
