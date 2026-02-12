@@ -2,11 +2,11 @@ description = "Switch to a different sound pack. Downloads it if missing."
 prompt = """
 The user wants to set their sound pack. 
 
-If they DID NOT provide a pack name, please run the list command: !{powershell.exe -NoProfile -ExecutionPolicy Bypass -Command 'Get-Content $env:TEMP/gemineer_path.txt -ErrorAction SilentlyContinue | ForEach-Object { powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$_\scripts\manage.ps1" -Action list }'}
+If they DID NOT provide a pack name, please run the list command: !{powershell.exe -NoProfile -ExecutionPolicy Bypass -Command 'Get-Content $env:TEMP/gemineer_path.txt -ErrorAction SilentlyContinue | ForEach-Object { powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$_\\scripts\\manage.ps1" -Action list }'}
 
 Show them the list of available packs and ask which one they want.
 
 If they DID provide a pack name ({{arg0}}):
-1. Run the download script: !{powershell.exe -NoProfile -ExecutionPolicy Bypass -Command 'Get-Content $env:TEMP/gemineer_path.txt -ErrorAction SilentlyContinue | ForEach-Object { powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$_\scripts\manage.ps1" -Action download -PackName {{arg0}} }'}
+1. Run the download script: !{powershell.exe -NoProfile -ExecutionPolicy Bypass -Command 'Get-Content $env:TEMP/gemineer_path.txt -ErrorAction SilentlyContinue | ForEach-Object { powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$_\\scripts\\manage.ps1" -Action download -PackName {{arg0}} }'}
 2. Tell the user to run `gemini extensions config gem-in-eer "Active Pack"` to finalize the change, or explain that they can set the `GEMINEER_PACK` environment variable.
 """
