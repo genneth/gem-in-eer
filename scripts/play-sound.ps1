@@ -50,8 +50,15 @@ $PossibleSounds = $Sounds | Get-Random -Count $Sounds.Count
 $SoundFile = $null
 
 foreach ($s in $PossibleSounds) {
-    if (Test-Path (Join-Path $AudioDir $s)) {
+    $Path1 = Join-Path $AudioDir $s
+    $Path2 = Join-Path $AudioDir "sounds/$s"
+    if (Test-Path $Path1) {
         $SoundFile = $s
+        $FinalPath = $Path1
+        break
+    } elseif (Test-Path $Path2) {
+        $SoundFile = $s
+        $FinalPath = $Path2
         break
     }
 }
@@ -60,8 +67,10 @@ foreach ($s in $PossibleSounds) {
 if (-not $SoundFile) {
     $AudioDir = Join-Path $AudioRootDir "mashup"
     foreach ($s in $PossibleSounds) {
-        if (Test-Path (Join-Path $AudioDir $s)) {
+        $Path1 = Join-Path $AudioDir $s
+        if (Test-Path $Path1) {
             $SoundFile = $s
+            $FinalPath = $Path1
             break
         }
     }
@@ -71,7 +80,7 @@ if (-not $SoundFile) {
     exit 0
 }
 
-$SoundPath = Join-Path $AudioDir $SoundFile
+$SoundPath = $FinalPath
 
 # Play sound in background so we don't block the CLI
 $PlayCommand = @"
