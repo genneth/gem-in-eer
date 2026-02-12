@@ -9,12 +9,12 @@
     {
       "name": "Active Pack",
       "description": "The character pack to use for sounds.",
-      "envVar": "GEMEER_PACK"
+      "envVar": "GEMINEER_PACK"
     },
     {
       "name": "Volume",
       "description": "Sound volume (0.0 to 1.0).",
-      "envVar": "GEMEER_VOLUME"
+      "envVar": "GEMINEER_VOLUME"
     }
   ]
 }

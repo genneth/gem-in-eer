@@ -16,7 +16,7 @@ if ($JsonInput) {
 }
 
 # Determine the active pack
-$Pack = $env:GEMEER_PACK
+$Pack = $env:GEMINEER_PACK
 if (-not $Pack -or -not (Test-Path (Join-Path $AudioRootDir $Pack))) {
     $Pack = "mashup"
 }
@@ -97,7 +97,7 @@ if (-not $SoundPath) {
 if (-not $SoundPath) { exit 0 }
 
 # Determine Volume
-$Volume = $env:GEMEER_VOLUME
+$Volume = $env:GEMINEER_VOLUME
 if (-not $Volume) { $Volume = 0.5 }
 
 # Play sound in background
