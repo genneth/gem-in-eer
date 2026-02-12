@@ -1,6 +1,9 @@
-# Gem-in-eer 🚀
+# Gem-in-eer 🚀 (Windows Only)
 
 **The tools of the future!**
+
+> [!IMPORTANT]
+> **Gem-in-eer is currently Windows-only.** It utilizes PowerShell and Windows Media Player (`PresentationCore`) for low-latency, non-blocking audio playback.
 
 Gem-in-eer is a sound notification system for the Gemini CLI. It allows you to tap into the entire [PeonPing](https://github.com/PeonPing/peon-ping) sound ecosystem to get audio feedback for CLI events.
 

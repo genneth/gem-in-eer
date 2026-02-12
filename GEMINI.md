@@ -15,6 +15,7 @@ Gem-in-eer is a sound notification system for the Gemini CLI, inspired by PeonPi
     - Users must run `/gem-in-eer:set <pack>` to download sounds after installation.
 
 ## Key Configuration
+- **OS Requirement:** Windows (Required for PowerShell/PresentationCore audio backend).
 - **Active Pack:** Controlled by `GEMINEER_PACK`.
 - **Volume:** Controlled by `GEMINEER_VOLUME` (0.0 to 1.0).
 - **Packs:** Support for any pack from the [OpenPeon Registry](https://github.com/PeonPing/registry).
