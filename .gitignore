@@ -1,0 +1,14 @@
+# Gemini CLI Extension
+.env
+*.log
+audio/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# PowerShell
+*.ps1.backup
+
+# VS Code
+.vscode/
