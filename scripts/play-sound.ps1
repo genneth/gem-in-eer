@@ -15,10 +15,15 @@ if ($JsonInput) {
     }
 }
 
-# Determine the active pack (kirov, engineer, or mashup)
-$Pack = $env:RA2_PACK
+# Determine the active pack
+$Pack = $env:GEMEER_PACK
 if (-not $Pack -or -not (Test-Path (Join-Path $AudioRootDir $Pack))) {
     $Pack = "mashup"
+}
+
+# Auto-setup on first run
+if ($Event -eq "SessionStart" -and -not (Test-Path (Join-Path $AudioRootDir "mashup"))) {
+    Start-Process powershell.exe -ArgumentList "-NoProfile", "-NonInteractive", "-File", (Join-Path $ExtensionPath "scripts/setup-audio.ps1") -WindowStyle Hidden
 }
 
 $AudioDir = Join-Path $AudioRootDir $Pack

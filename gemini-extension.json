@@ -8,8 +8,8 @@
   "settings": [
     {
       "name": "Active Pack",
-      "description": "The character pack to use for sounds (kirov, engineer, or mashup).",
-      "envVar": "RA2_PACK"
+      "description": "The character pack to use for sounds.",
+      "envVar": "GEMEER_PACK"
     }
   ]
 }
