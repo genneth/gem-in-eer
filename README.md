@@ -18,7 +18,7 @@ Gem-in-eer is a themed notification system for the Gemini CLI. It provides audio
 
 Install directly via the Gemini CLI:
 ```bash
-gemini extensions install https://github.com/YOUR_USERNAME/gem-in-eer
+gemini extensions install https://github.com/genneth/gem-in-eer
 ```
 *Note: Audio assets will be downloaded automatically upon the first run.*
 

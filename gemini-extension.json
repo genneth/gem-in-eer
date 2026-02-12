@@ -4,7 +4,7 @@
   "description": "Red Alert 2 themed notification system for Gemini CLI, inspired by PeonPing.",
   "author": "Gem-in-eer Contributors",
   "license": "MIT",
-  "repository": "https://github.com/YOUR_USERNAME/gem-in-eer",
+  "repository": "https://github.com/genneth/gem-in-eer",
   "settings": [
     {
       "name": "Active Pack",
