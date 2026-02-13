@@ -2,6 +2,7 @@
 .env
 *.log
 audio/
+.state.json
 
 # Windows
 Thumbs.db
