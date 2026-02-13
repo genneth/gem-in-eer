@@ -40,16 +40,6 @@
         ]
       }
     ],
-    "AfterTool": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event AfterTool"
-          }
-        ]
-      }
-    ],
     "Notification": [
       {
         "hooks": [
