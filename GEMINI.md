@@ -22,6 +22,6 @@ Gem-in-eer is a sound notification system for the Gemini CLI, inspired by PeonPi
 
 ## Dynamic Pack Selection
 When the user wants to list or set a pack, use the following logic:
-1. To see all available packs, run `powershell.exe -File scripts/get-registry.ps1`.
+1. To see all available packs, run `powershell.exe -File scripts/manage.ps1 -Action list`.
 2. Present the list to the user.
 3. If the user picks a pack, use the `/gem-in-eer:set <pack_name>` command.
