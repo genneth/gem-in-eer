@@ -109,7 +109,7 @@ Add-Type -AssemblyName PresentationCore
 `$player.Open([Uri]::new('$($SoundPath.Replace([char]92, '/'))'))
 `$player.Volume = $Volume
 `$player.Play()
-Start-Sleep -Seconds 5
+Start-Sleep -Seconds 8
 `$player.Close()
 "@
 
