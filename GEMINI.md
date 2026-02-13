@@ -14,6 +14,17 @@ Gem-in-eer is a sound notification system for the Gemini CLI, inspired by PeonPi
     - `scripts/manage.ps1` handles registry listing and pack downloading.
     - Users must run `/gem-in-eer:set <pack>` to download sounds after installation.
 
+## Path Resolution Strategy (The "Breadcrumb")
+Gemini CLI slash commands (TOML) currently do not support the `${extensionPath}` variable. To work around this:
+1. **Write:** Every time a hook runs (e.g., `SessionStart`), `scripts/play-sound.ps1` writes the extension's absolute path to `$env:TEMP/gemineer_path.txt`.
+2. **Read:** Slash commands (`list.toml`, `set.toml`) read this temp file to locate `scripts/manage.ps1`.
+This ensures commands function correctly regardless of the current working directory.
+
+## Randomization & State
+To prevent repetitive audio, the system ensures the same sound clip is never played twice in a row for the same event category.
+- **State File:** This tracking data is stored locally in `.state.json`.
+- **Privacy:** This file is included in `.gitignore` and is **never** committed to the repository.
+
 ## Key Configuration
 - **OS Requirement:** Windows (Required for PowerShell/PresentationCore audio backend).
 - **Active Pack:** Controlled by `GEMINEER_PACK`.
