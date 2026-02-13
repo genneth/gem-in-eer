@@ -33,7 +33,8 @@ function Download-Pack($Name) {
     $Path = if ($PackInfo.source_path -ne $null) { $PackInfo.source_path } else { $Name }
 
     $BaseUrl = "https://raw.githubusercontent.com/$Repo/$Ref/$Path"
-    if ($Path -eq "") { $BaseUrl = "https://raw.githubusercontent.com/$Repo/$Ref" }
+    if ($Path -eq "" -or $Path -eq ".") { $BaseUrl = "https://raw.githubusercontent.com/$Repo/$Ref" }
+    $BaseUrl = $BaseUrl.TrimEnd("/")
 
     $PackDir = Join-Path $AudioRootDir $Name
     if (-not (Test-Path $PackDir)) { New-Item -ItemType Directory -Path $PackDir | Out-Null }
@@ -43,7 +44,7 @@ function Download-Pack($Name) {
     Write-Host "Downloading $Name manifest..."
     try {
         $Manifest = Invoke-RestMethod -Uri "$BaseUrl/openpeon.json"
-        $Manifest | ConvertTo-Json | Out-File (Join-Path $PackDir "openpeon.json")
+        $Manifest | ConvertTo-Json -Depth 10 | Out-File (Join-Path $PackDir "openpeon.json") -Encoding UTF8
         
         Write-Host "Downloading sounds..."
         foreach ($Cat in $Manifest.categories.PSObject.Properties) {

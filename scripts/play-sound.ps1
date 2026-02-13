@@ -45,9 +45,17 @@ if (-not $CespCategory) { exit 0 }
 
 # State file for avoiding repeats
 $StateFile = Join-Path $ExtensionPath ".state.json"
-$State = if (Test-Path $StateFile) { Get-Content $StateFile | ConvertFrom-Json } else { @{} }
-if ($State -isnot [PSCustomObject]) { $State = [PSCustomObject]@{ last_played = [PSCustomObject]@{} } }
-if (-not $State.last_played) { $State.last_played = [PSCustomObject]@{} }
+$State = if (Test-Path $StateFile) { Get-Content $StateFile | ConvertFrom-Json } else { [PSCustomObject]@{ last_played = @{} } }
+if ($State -isnot [PSCustomObject]) { $State = [PSCustomObject]@{ last_played = @{} } }
+if ($State.last_played -isnot [System.Collections.IDictionary]) {
+    $oldLastPlayed = $State.last_played
+    $State.last_played = @{}
+    if ($oldLastPlayed -is [PSCustomObject]) {
+        foreach ($prop in $oldLastPlayed.PSObject.Properties) {
+            $State.last_played[$prop.Name] = $prop.Value
+        }
+    }
+}
 
 # Function to pick a sound from a pack's manifest
 function Get-SoundFromPack($PackPath, $Category, $StateObj) {
@@ -59,7 +67,7 @@ function Get-SoundFromPack($PackPath, $Category, $StateObj) {
         $Sounds = $Manifest.categories.$Category.sounds
         if ($Sounds) {
             # Filter out last played if more than one sound exists
-            $LastPlayed = $StateObj.last_played.$Category
+            $LastPlayed = $StateObj.last_played[$Category]
             $Candidates = if ($Sounds.Count -gt 1 -and $LastPlayed) {
                 $Sounds | Where-Object { $_.file -ne $LastPlayed }
             } else {
@@ -68,9 +76,7 @@ function Get-SoundFromPack($PackPath, $Category, $StateObj) {
             
             $Sound = $Candidates | Get-Random
             $File = $Sound.file
-            
-            # Save new last played
-            $StateObj.last_played.$Category = $File
+            $StateObj.last_played[$Category] = $File
             
             # Try root, sounds/ subfolder, etc.
             $PathsToTry = @(
