@@ -50,12 +50,12 @@
         ]
       }
     ],
-    "InputRequired": [
+    "Notification": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event InputRequired"
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event Notification"
           }
         ]
       }

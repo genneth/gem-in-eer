@@ -32,7 +32,7 @@ $CategoryMap = @{
     "AfterAgent"      = "task.complete"
     "BeforeTool"      = "task.acknowledge"
     "AfterTool"       = "task.acknowledge"
-    "InputRequired"   = "input.required"
+    "Notification"    = "input.required"
     "BeforeAgent"     = "task.acknowledge"
 }
 
