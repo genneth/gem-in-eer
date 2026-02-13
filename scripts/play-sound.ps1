@@ -22,7 +22,7 @@ if ($JsonInput) {
 # Determine the active pack
 $Pack = $env:GEMINEER_PACK
 if (-not $Pack -or -not (Test-Path (Join-Path $AudioRootDir $Pack))) {
-    $Pack = "mashup"
+    exit 0
 }
 
 # Map Gemini CLI events to CESP (Coding Event Sound Pack) categories
@@ -67,7 +67,7 @@ function Get-SoundFromPack($PackPath, $Category, $StateObj) {
         $Sounds = $Manifest.categories.$Category.sounds
         if ($Sounds) {
             # Filter out last played if more than one sound exists
-            $LastPlayed = $StateObj.last_played[$Category]
+            $LastPlayed = $StateObj.last_played.$Category
             $Candidates = if ($Sounds.Count -gt 1 -and $LastPlayed) {
                 $Sounds | Where-Object { $_.file -ne $LastPlayed }
             } else {
@@ -76,7 +76,7 @@ function Get-SoundFromPack($PackPath, $Category, $StateObj) {
             
             $Sound = $Candidates | Get-Random
             $File = $Sound.file
-            $StateObj.last_played[$Category] = $File
+            $StateObj.last_played.$Category = $File
             
             # Try root, sounds/ subfolder, etc.
             $PathsToTry = @(
@@ -94,12 +94,6 @@ function Get-SoundFromPack($PackPath, $Category, $StateObj) {
 
 $PackPath = Join-Path $AudioRootDir $Pack
 $SoundPath = Get-SoundFromPack $PackPath $CespCategory $State
-
-# Fallback to mashup
-if (-not $SoundPath -and $Pack -ne "mashup") {
-    $MashupPath = Join-Path $AudioRootDir "mashup"
-    $SoundPath = Get-SoundFromPack $MashupPath $CespCategory $State
-}
 
 if (-not $SoundPath) { exit 0 }
 
