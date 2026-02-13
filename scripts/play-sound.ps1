@@ -30,7 +30,6 @@ $CategoryMap = @{
     "SessionStart"    = "session.start"
     "SessionEnd"      = "session.end"
     "AfterAgent"      = "task.complete"
-    "BeforeTool"      = "input.required"
     "Notification"    = "input.required"
     "BeforeAgent"     = "task.acknowledge"
 }
