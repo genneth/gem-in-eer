@@ -1,10 +1,12 @@
 {
   "name": "gem-in-eer",
-  "version": "0.2.0",
-  "description": "Red Alert 2 themed notification system for Gemini CLI, inspired by PeonPing.",
+  "version": "0.3.0",
+  "description": "Sound notification system for Gemini CLI, inspired by PeonPing.",
   "author": "Gem-in-eer Contributors",
   "license": "MIT",
-  "platforms": ["win32"],
+  "platforms": [
+    "win32"
+  ],
   "repository": "https://github.com/genneth/gem-in-eer",
   "settings": [
     {
@@ -16,6 +18,48 @@
       "name": "Volume",
       "description": "Sound volume (0.0 to 1.0).",
       "envVar": "GEMINEER_VOLUME"
+    },
+    {
+      "name": "Hook: Session Start",
+      "description": "Enable sound for session start (true/false).",
+      "envVar": "GEMINEER_HOOK_SESSIONSTART",
+      "default": "true"
+    },
+    {
+      "name": "Hook: Session End",
+      "description": "Enable sound for session end (true/false).",
+      "envVar": "GEMINEER_HOOK_SESSIONEND",
+      "default": "true"
+    },
+    {
+      "name": "Hook: Before Agent",
+      "description": "Enable sound before an agent starts (true/false).",
+      "envVar": "GEMINEER_HOOK_BEFOREAGENT",
+      "default": "true"
+    },
+    {
+      "name": "Hook: After Agent",
+      "description": "Enable sound after an agent finishes (true/false).",
+      "envVar": "GEMINEER_HOOK_AFTERAGENT",
+      "default": "true"
+    },
+    {
+      "name": "Hook: Before Tool",
+      "description": "Enable sound before a tool is called (true/false).",
+      "envVar": "GEMINEER_HOOK_BEFORETOOL",
+      "default": "true"
+    },
+    {
+      "name": "Hook: After Tool",
+      "description": "Enable sound after a tool finishes (true/false).",
+      "envVar": "GEMINEER_HOOK_AFTERTOOL",
+      "default": "true"
+    },
+    {
+      "name": "Hook: Notification",
+      "description": "Enable sound for notifications/prompts (true/false).",
+      "envVar": "GEMINEER_HOOK_NOTIFICATION",
+      "default": "true"
     }
   ]
 }

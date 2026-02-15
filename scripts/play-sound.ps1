@@ -5,6 +5,12 @@ param(
 $ExtensionPath = $PSScriptRoot | Split-Path -Parent
 $AudioRootDir = Join-Path $ExtensionPath "audio"
 
+# Check if hook is enabled (default to true)
+$EnvVarName = "GEMINEER_HOOK_" + $Event.ToUpper()
+if ([System.Environment]::GetEnvironmentVariable($EnvVarName) -eq "false") {
+    exit 0
+}
+
 # Persist path for slash commands
 $PathFile = Join-Path $env:TEMP "gemineer_path.txt"
 $ExtensionPath | Out-File $PathFile -Encoding UTF8

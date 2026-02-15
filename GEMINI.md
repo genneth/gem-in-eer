@@ -5,10 +5,12 @@
 Gem-in-eer is a sound notification system for the Gemini CLI, inspired by PeonPing. It provides audio feedback for CLI events using iconic unit responses from various games.
 
 ## Technical Architecture
-- **Manifest:** `gemini-extension.json` defines the extension, repository, and the `GEMINEER_PACK` and `GEMINEER_VOLUME` settings.
-- **Hooks:** `hooks/hooks.json` registers PowerShell triggers for session and tool events.
-- **Slash Commands:** Located in `commands/gem-in-eer/`, for listing and setting packs.
-- **Audio Logic:** `scripts/play-sound.ps1` maps events to sounds using pack manifests (`openpeon.json`) and plays them asynchronously.
+- **Manifest:** `gemini-extension.json` defines the extension, repository, and settings for active pack, volume, and individual hook toggles.
+- **Hooks:** `hooks/hooks.json` registers PowerShell triggers for all supported session and tool events.
+- **Slash Commands:** Located in `commands/gem-in-eer/`, for browsing and setting sound packs.
+    - `/gem-in-eer:list`: Lists available sound packs.
+    - `/gem-in-eer:set <pack>`: Downloads and selects a pack.
+- **Audio Logic:** `scripts/play-sound.ps1` maps events to sounds using pack manifests (`openpeon.json`). It checks environment variables (e.g., `GEMINEER_HOOK_SESSIONSTART`) to determine if a specific hook is enabled before playing audio.
 - **Asset Management:** 
     - Audio files are ignored by Git.
     - `scripts/manage.ps1` handles registry listing and pack downloading.

@@ -10,12 +10,52 @@
         ]
       }
     ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event SessionEnd"
+          }
+        ]
+      }
+    ],
+    "BeforeAgent": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event BeforeAgent"
+          }
+        ]
+      }
+    ],
     "AfterAgent": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event AfterAgent"
+          }
+        ]
+      }
+    ],
+    "BeforeTool": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event BeforeTool"
+          }
+        ]
+      }
+    ],
+    "AfterTool": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event AfterTool"
           }
         ]
       }

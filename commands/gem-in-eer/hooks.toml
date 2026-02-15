@@ -1,7 +1,0 @@
-description = "Interactively configure which hooks trigger sound notifications."
-prompt = """
-Opening the interactive hook configuration menu...
-Note: You may need to press **Ctrl+F** to focus the shell for interaction.
-
-!{powershell.exe -NoProfile -ExecutionPolicy Bypass -Command 'Get-Content $env:TEMP/gemineer_path.txt -ErrorAction SilentlyContinue | ForEach-Object { powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$_\scripts\manage.ps1" -Action configure-hooks }'}
-"""
