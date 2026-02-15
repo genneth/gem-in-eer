@@ -10,16 +10,6 @@
         ]
       }
     ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event SessionEnd"
-          }
-        ]
-      }
-    ],
     "AfterAgent": [
       {
         "hooks": [
@@ -36,16 +26,6 @@
           {
             "type": "command",
             "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event Notification"
-          }
-        ]
-      }
-    ],
-    "BeforeAgent": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ${extensionPath}/scripts/play-sound.ps1 -Event BeforeAgent"
           }
         ]
       }
