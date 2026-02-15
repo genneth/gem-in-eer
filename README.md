@@ -13,6 +13,7 @@ Gem-in-eer is a sound notification system for the Gemini CLI. It allows you to t
 - **Slash Commands:**
   - `/gem-in-eer:list`: Browse all available sound packs.
   - `/gem-in-eer:set <pack_name>`: Download and set a specific pack (e.g., `/gem-in-eer:set ra2_kirov`).
+  - `/gem-in-eer:hooks`: Interactively toggle which CLI events trigger sounds.
 - **Event-Driven:** Hooks into Gemini CLI lifecycle events (`SessionStart`, `AfterAgent`, `BeforeTool`, `Error`).
 
 ## Installation

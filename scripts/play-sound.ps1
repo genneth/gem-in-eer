@@ -32,6 +32,8 @@ $CategoryMap = @{
     "AfterAgent"      = "task.complete"
     "Notification"    = "input.required"
     "BeforeAgent"     = "task.acknowledge"
+    "BeforeTool"      = "task.acknowledge"
+    "AfterTool"       = "task.complete"
 }
 
 $CespCategory = $CategoryMap[$Event]

@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet("list", "download")]
+    [ValidateSet("list", "download", "configure-hooks")]
     [string]$Action,
     
     [string]$PackName
@@ -75,5 +75,83 @@ switch ($Action) {
     
     "download" {
         Download-Pack $PackName
+    }
+
+    "configure-hooks" {
+        $AllHooks = @("SessionStart", "SessionEnd", "BeforeAgent", "AfterAgent", "BeforeTool", "AfterTool", "Notification")
+        
+        # Load current hooks
+        $HooksFile = Join-Path $ExtensionPath "hooks" "hooks.json"
+        $CurrentHooksObj = if (Test-Path $HooksFile) { Get-Content $HooksFile | ConvertFrom-Json } else { @{ hooks = @{} } }
+        
+        $ActiveHooks = New-Object System.Collections.Generic.List[string]
+        if ($CurrentHooksObj.hooks) {
+            foreach ($prop in $CurrentHooksObj.hooks.PSObject.Properties) {
+                $ActiveHooks.Add($prop.Name) | Out-Null
+            }
+        }
+        
+        $Modified = $false
+        
+        while ($true) {
+            Clear-Host
+            Write-Host "--- Gem-in-eer Hook Configuration ---"
+            Write-Host "Select hooks to toggle. Press 'S' to save, 'Q' to quit."
+            Write-Host "NOTE: You may need to press Ctrl+F to focus this shell."
+            Write-Host ""
+            
+            for ($i = 0; $i -lt $AllHooks.Count; $i++) {
+                $H = $AllHooks[$i]
+                $Status = if ($ActiveHooks.Contains($H)) { "[ON] " } else { "[OFF]" }
+                Write-Host "$($i + 1). $Status $H"
+            }
+            Write-Host ""
+            Write-Host "S. [Save and Exit]"
+            Write-Host "Q. [Quit without saving]"
+            Write-Host ""
+            
+            $Selection = Read-Host "Toggle (1-$($AllHooks.Count)) or S/Q"
+            $Selection = $Selection.ToUpper()
+
+            if ($Selection -eq "S") {
+                if ($Modified) {
+                    $NewHooks = @{}
+                    foreach ($H in $AllHooks) {
+                        if ($ActiveHooks.Contains($H)) {
+                            $NewHooks[$H] = @(
+                                @{
+                                    "hooks" = @(
+                                        @{
+                                            "type" = "command"
+                                            "command" = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `${extensionPath}/scripts/play-sound.ps1 -Event $H"
+                                        }
+                                    )
+                                }
+                            )
+                        }
+                    }
+                    $FinalObj = @{ "hooks" = $NewHooks }
+                    $FinalObj | ConvertTo-Json -Depth 10 | Out-File $HooksFile -Encoding UTF8
+                    Write-Host "`nSettings saved! Please restart the Gemini CLI for changes to take effect."
+                    Start-Sleep -Seconds 2
+                }
+                break
+            }
+            elseif ($Selection -eq "Q") {
+                break
+            }
+            elseif ($Selection -match "^\d+$") {
+                $Idx = [int]$Selection - 1
+                if ($Idx -ge 0 -and $Idx -lt $AllHooks.Count) {
+                    $SelectedHook = $AllHooks[$Idx]
+                    if ($ActiveHooks.Contains($SelectedHook)) {
+                        $ActiveHooks.Remove($SelectedHook) | Out-Null
+                    } else {
+                        $ActiveHooks.Add($SelectedHook) | Out-Null
+                    }
+                    $Modified = $true
+                }
+            }
+        }
     }
 }
